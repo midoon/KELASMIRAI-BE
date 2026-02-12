@@ -29,6 +29,10 @@
       "description": "Multi-tenant management"
     },
     {
+      "name": "Subscriptions",
+      "description": "Subscription plans"
+    },
+    {
       "name": "Users",
       "description": "User & Role management"
     },
@@ -95,10 +99,6 @@
     {
       "name": "Notifications",
       "description": "Notifications"
-    },
-    {
-      "name": "Subscriptions",
-      "description": "Subscription plans"
     }
   ],
   "paths": {

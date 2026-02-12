@@ -267,30 +267,6 @@ Lebih conversion friendly.
 
 ---
 
-# ⚙️ Endpoint Summary
-
-Public:
-
-```
-POST   /public/register-school
-POST   /public/check-slug
-GET    /public/plans
-```
-
-Webhook:
-
-```
-POST   /webhooks/midtrans
-```
-
-Internal:
-
-```
-POST   /internal/provision-tenant
-```
-
----
-
 # 🧠 Di Kode Golang (Struktur Service)
 
 Pisahkan service:
