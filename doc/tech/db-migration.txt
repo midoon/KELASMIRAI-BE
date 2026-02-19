@@ -13,13 +13,13 @@
 
 
 ==== CARA TURUN VERSI MIGRASI ===
-migrate -database "mysql://root:@tcp(localhost:3306)/kamipa_db" -path migrations down 1
+migrate -database "postgres://postgres:root@localhost:5432/kelasmirai_db?sslmode=disable" -path migrations down 1
 
 === NOTE IF DIRTY DB IS EXIST ==
 
 1. kembali ke versi migrasi sebelum DIRTY
-=> migrate -database "mysql://root:root@tcp(localhost:3306)/kamipa_db" -path migrations force [versi migration]
-=> migrate -database "mysql://root:root@tcp(localhost:3306)/kamipa_db" -path migrations force 20240309044322
+=> migrate -database "postgres://postgres:root@localhost:5432/kelasmirai_db?sslmode=disable" -path migrations force [versi migration]
+=> migrate -database "postgres://postgres:root@localhost:5432/kelasmirai_db?sslmode=disable" -path migrations force 20240309044322
 
 2. perbaiki file migrations
 
@@ -28,4 +28,4 @@ migrate -database "mysql://root:@tcp(localhost:3306)/kamipa_db" -path migrations
 4. jalankan migrations up
 
 #. untuk melihat versi migrasi saat ini
-=> migrate -database "mysql://root:root@tcp(localhost:3306)/kamipa_db" -path migrations version
+=> migrate -database "postgres://postgres:root@localhost:5432/kelasmirai_db?sslmode=disable" -path migrations version
