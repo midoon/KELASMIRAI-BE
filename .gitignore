@@ -37,3 +37,7 @@ dist/
 
 # OS specific
 Thumbs.db
+
+
+# Other files
+temp

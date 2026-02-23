@@ -1,0 +1,1 @@
+DROP TYPE subscription_status;

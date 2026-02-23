@@ -1,0 +1,3 @@
+## refactor migration file:
+- pisahkan create enum
+- pisahkan seeding plan

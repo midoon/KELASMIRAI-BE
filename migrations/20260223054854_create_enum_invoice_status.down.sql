@@ -1,0 +1,1 @@
+DROP TYPE invoice_status;

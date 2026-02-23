@@ -1,4 +1,3 @@
-CREATE TYPE tenant_status AS ENUM ('active', 'suspended', 'cancelled');
 
 CREATE TABLE tenants
 (
