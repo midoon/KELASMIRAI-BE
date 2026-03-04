@@ -2,15 +2,17 @@ package main
 
 import (
 	"fmt"
-	"kelasmirai_backend/src/internal/config"
+	"kelasmirai_backend/internal/config"
 	"net/http"
 
 	"github.com/gorilla/mux"
 )
 
 func main() {
-	cnf := config.GetConfig()
-	db := config.NewDatabase(cnf)
+
+	viperConfig := config.NewViper()
+	log := config.NewLogger(viperConfig)
+	db := config.NewDatabase(viperConfig, log)
 
 	r := mux.NewRouter()
 
@@ -30,7 +32,7 @@ func main() {
 	// 	Handler: handler,
 	// }
 
-	addr := fmt.Sprintf("%s:%s", cnf.Server.Host, cnf.Server.Port)
+	addr := fmt.Sprintf("%s:%s", viperConfig.GetString("web.host"), viperConfig.GetString("web.port"))
 	server := &http.Server{
 		Addr:    addr,
 		Handler: r,

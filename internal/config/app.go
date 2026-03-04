@@ -1,7 +1,7 @@
 package config
 
 import (
-	"kelasmirai_backend/src/delivery/http/route"
+	"kelasmirai_backend/internal/delivery/http/route"
 	"net/http"
 
 	"github.com/go-playground/validator/v10"
@@ -15,7 +15,6 @@ type BootstrapConfig struct {
 	Router      *mux.Router
 	HttpClient  *http.Client
 	Validate    *validator.Validate
-	Cnf         *ConfigApp
 	RedisClient *redis.Client
 }
 
