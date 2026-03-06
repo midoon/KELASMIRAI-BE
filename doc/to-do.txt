@@ -1,2 +1,1 @@
-1. config viper
-2. create registration API
+1. create registration API

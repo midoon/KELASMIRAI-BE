@@ -10,3 +10,4 @@ Redis: $ go get github.com/redis/go-redis/v9
 Midtrans: $ go get -u github.com/midtrans/midtrans-go
 Gorm Custom Datatype: go get gorm.io/datatypes
 Viper: go get github.com/spf13/viper
+GoMain: go get -u gopkg.in/gomail.v2
