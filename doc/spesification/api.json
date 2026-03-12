@@ -11,11 +11,11 @@
   },
   "servers": [
     {
-      "url": "https://api.kelasmirai.com/v1",
+      "url": "https://api.kelasmirai.com",
       "description": "Production"
     },
     {
-      "url": "https://staging-api.kelasmirai.com/v1",
+      "url": "https://staging-api.kelasmirai.com",
       "description": "Staging"
     }
   ],
@@ -109,15 +109,45 @@
         "requestBody": {
           "required": true,
           "content": {
-            "application/json": {
-              "example": {
-                "school_name": "SMK Negeri 1 Jakarta",
-                "slug": "smkn1-jkt",
-                "admin_name": "Budi",
-                "admin_email": "admin@smkn1.sch.id",
-                "password": "secret",
-                "plan_id": "uuid-plan-premium",
-                "billing_cycle": "monthly"
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "school_name": {
+                    "type": "string"
+                  },
+                  "school_slug": {
+                    "type": "string"
+                  },
+                  "school_email": {
+                    "type": "string"
+                  },
+                  "school_phone": {
+                    "type": "string"
+                  },
+                  "school_address": {
+                    "type": "string"
+                  },
+                  "school_logo": {
+                    "type": "string",
+                    "format": "binary"
+                  },
+                  "admin_name": {
+                    "type": "string"
+                  },
+                  "admin_email": {
+                    "type": "string"
+                  },
+                  "admin_password": {
+                    "type": "string"
+                  },
+                  "plan_id": {
+                    "type": "string"
+                  },
+                  "billing_cycle": {
+                    "type": "string"
+                  }
+                }
               }
             }
           }
