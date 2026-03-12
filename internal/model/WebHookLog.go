@@ -1,6 +1,7 @@
 package model
 
 import (
+	"context"
 	"time"
 
 	"github.com/google/uuid"
@@ -25,4 +26,14 @@ func (WebhookLog) TableName() string {
 func (m *WebhookLog) BeforeCreate(tx *gorm.DB) (err error) {
 	m.ID = uuid.New()
 	return
+}
+
+type WebhookLogRepository interface {
+	Store(ctx context.Context, log *WebhookLog) error
+	GetByID(ctx context.Context, id uuid.UUID) (*WebhookLog, error)
+	Update(ctx context.Context, log *WebhookLog) error
+	Delete(ctx context.Context, id uuid.UUID) error
+	GetUnprocessedByProvider(ctx context.Context, provider string) ([]WebhookLog, error)
+	GetByProviderAndExternalID(ctx context.Context, provider, externalID string) (*WebhookLog, error)
+	MarkProcessed(ctx context.Context, id uuid.UUID) error
 }

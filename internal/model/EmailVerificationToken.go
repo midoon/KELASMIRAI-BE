@@ -1,6 +1,7 @@
 package model
 
 import (
+	"context"
 	"time"
 
 	"github.com/google/uuid"
@@ -24,4 +25,13 @@ func (EmailVerificationToken) TableName() string {
 func (m *EmailVerificationToken) BeforeCreate(tx *gorm.DB) (err error) {
 	m.ID = uuid.New()
 	return
+}
+
+type EmailVerificationTokenRepository interface {
+	Store(ctx context.Context, token *EmailVerificationToken) error
+	GetByID(ctx context.Context, id uuid.UUID) (*EmailVerificationToken, error)
+	Update(ctx context.Context, token *EmailVerificationToken) error
+	Delete(ctx context.Context, id uuid.UUID) error
+	GetValidByUserID(ctx context.Context, userID uuid.UUID) (*EmailVerificationToken, error)
+	GetByToken(ctx context.Context, token string) (*EmailVerificationToken, error)
 }

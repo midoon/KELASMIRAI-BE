@@ -1,6 +1,7 @@
 package model
 
 import (
+	"context"
 	"time"
 
 	"github.com/google/uuid"
@@ -36,4 +37,12 @@ func (User) TableName() string {
 func (m *User) BeforeCreate(tx *gorm.DB) (err error) {
 	m.ID = uuid.New()
 	return
+}
+
+type UserRepository interface {
+	Store(ctx context.Context, user *User) error
+	GetByID(ctx context.Context, id uuid.UUID) (*User, error)
+	GetByEmail(ctx context.Context, tenantID uuid.UUID, email string) (*User, error)
+	Update(ctx context.Context, user *User) error
+	Delete(ctx context.Context, id uuid.UUID) error
 }

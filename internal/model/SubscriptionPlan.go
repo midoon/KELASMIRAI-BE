@@ -1,6 +1,7 @@
 package model
 
 import (
+	"context"
 	"time"
 
 	"github.com/google/uuid"
@@ -29,4 +30,9 @@ func (SubscriptionPlan) TableName() string {
 func (m *SubscriptionPlan) BeforeCreate(tx *gorm.DB) (err error) {
 	m.ID = uuid.New()
 	return
+}
+
+type SubscriptionPlanRepository interface {
+	Get(ctx context.Context, id uuid.UUID) (*SubscriptionPlan, error)
+	GetAll(ctx context.Context) ([]SubscriptionPlan, error)
 }

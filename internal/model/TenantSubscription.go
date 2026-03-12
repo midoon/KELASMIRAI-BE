@@ -1,6 +1,7 @@
 package model
 
 import (
+	"context"
 	"time"
 
 	"github.com/google/uuid"
@@ -40,4 +41,16 @@ func (TenantSubscription) TableName() string {
 func (m *TenantSubscription) BeforeCreate(tx *gorm.DB) (err error) {
 	m.ID = uuid.New()
 	return
+}
+
+type TenantSubscriptionRepository interface {
+	Store(ctx context.Context, subscription *TenantSubscription) error
+	GetByID(ctx context.Context, id uuid.UUID) (*TenantSubscription, error)
+	Update(ctx context.Context, subscription *TenantSubscription) error
+	Delete(ctx context.Context, id uuid.UUID) error
+	GetActiveByTenantID(ctx context.Context, tenantID uuid.UUID) (*TenantSubscription, error)
+	GetByMidtransSubscriptionID(ctx context.Context, id string) (*TenantSubscription, error)
+	Activate(ctx context.Context, id uuid.UUID) error
+	MarkPastDue(ctx context.Context, id uuid.UUID) error
+	Cancel(ctx context.Context, id uuid.UUID) error
 }

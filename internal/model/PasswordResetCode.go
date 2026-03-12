@@ -1,6 +1,7 @@
 package model
 
 import (
+	"context"
 	"time"
 
 	"github.com/google/uuid"
@@ -24,4 +25,15 @@ func (PasswordResetCode) TableName() string {
 func (m *PasswordResetCode) BeforeCreate(tx *gorm.DB) (err error) {
 	m.ID = uuid.New()
 	return
+}
+
+type PasswordResetCodeRepository interface {
+	Store(ctx context.Context, code *PasswordResetCode) error
+	GetByID(ctx context.Context, id uuid.UUID) (*PasswordResetCode, error)
+	Update(ctx context.Context, code *PasswordResetCode) error
+	Delete(ctx context.Context, id uuid.UUID) error
+	GetValidByUserID(ctx context.Context, userID uuid.UUID) (*PasswordResetCode, error)
+	GetByCode(ctx context.Context, code string) (*PasswordResetCode, error)
+	MarkUsed(ctx context.Context, id uuid.UUID) error
+	DeleteExpired(ctx context.Context) error
 }

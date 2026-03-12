@@ -1,6 +1,7 @@
 package model
 
 import (
+	"context"
 	"time"
 
 	"github.com/google/uuid"
@@ -37,4 +38,16 @@ func (Invoice) TableName() string {
 func (m *Invoice) BeforeCreate(tx *gorm.DB) (err error) {
 	m.ID = uuid.New()
 	return
+}
+
+type InvoiceRepository interface {
+	Store(ctx context.Context, invoice *Invoice) error
+	GetByID(ctx context.Context, id uuid.UUID) (*Invoice, error)
+	Update(ctx context.Context, invoice *Invoice) error
+	Delete(ctx context.Context, id uuid.UUID) error
+	GetBySubscriptionID(ctx context.Context, subscriptionID uuid.UUID) ([]Invoice, error)
+	GetPendingByTenantID(ctx context.Context, tenantID uuid.UUID) ([]Invoice, error)
+	GetByCode(ctx context.Context, code string) (*Invoice, error)
+	MarkPaid(ctx context.Context, id uuid.UUID) error
+	MarkExpired(ctx context.Context, id uuid.UUID) error
 }

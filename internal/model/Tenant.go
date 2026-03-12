@@ -1,6 +1,7 @@
 package model
 
 import (
+	"context"
 	"time"
 
 	"github.com/google/uuid"
@@ -36,4 +37,12 @@ func (Tenant) TableName() string {
 func (m *Tenant) BeforeCreate(tx *gorm.DB) (err error) {
 	m.ID = uuid.New()
 	return
+}
+
+type TenantRepository interface {
+	Store(ctx context.Context, tenant *Tenant) error
+	GetByID(ctx context.Context, id uuid.UUID) (*Tenant, error)
+	GetBySlug(ctx context.Context, slug string) (*Tenant, error)
+	Update(ctx context.Context, tenant *Tenant) error
+	Delete(ctx context.Context, id uuid.UUID) error
 }

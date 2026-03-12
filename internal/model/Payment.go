@@ -1,6 +1,7 @@
 package model
 
 import (
+	"context"
 	"time"
 
 	"github.com/google/uuid"
@@ -39,4 +40,17 @@ func (Payment) TableName() string {
 func (m *Payment) BeforeCreate(tx *gorm.DB) (err error) {
 	m.ID = uuid.New()
 	return
+}
+
+type PaymentRepository interface {
+	Store(ctx context.Context, payment *Payment) error
+	GetByID(ctx context.Context, id uuid.UUID) (*Payment, error)
+	Update(ctx context.Context, payment *Payment) error
+	Delete(ctx context.Context, id uuid.UUID) error
+	GetByMidtransOrderID(ctx context.Context, midtransOrderID string) (*Payment, error)
+	GetByInvoiceID(ctx context.Context, invoiceID uuid.UUID) ([]Payment, error)
+	MarkSettlement(ctx context.Context, id uuid.UUID, transactionID string) error
+	MarkExpired(ctx context.Context, id uuid.UUID) error
+	MarkCancel(ctx context.Context, id uuid.UUID) error
+	MarkDeny(ctx context.Context, id uuid.UUID) error
 }
