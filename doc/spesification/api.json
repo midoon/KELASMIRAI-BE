@@ -140,12 +140,6 @@
                   },
                   "admin_password": {
                     "type": "string"
-                  },
-                  "plan_id": {
-                    "type": "string"
-                  },
-                  "billing_cycle": {
-                    "type": "string"
                   }
                 }
               }

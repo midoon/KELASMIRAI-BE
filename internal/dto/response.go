@@ -1,4 +1,4 @@
-package http
+package dto
 
 type MessageResponse struct {
 	Status  bool   `json:"status"`

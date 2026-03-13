@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"kelasmirai_backend/internal/config"
+	"kelasmirai_backend/internal/delivery/http/middleware"
 	"net/http"
 
 	"github.com/gorilla/mux"
@@ -24,18 +25,12 @@ func main() {
 		HttpClient: &httpClient,
 	})
 
-	// handler := middleware.CorsMiddleware(r) // harus diassign di awal, biar kepanggil pertamakali
-
-	// addr := fmt.Sprintf("%s:%s", cnf.Server.Host, cnf.Server.Port)
-	// server := &http.Server{
-	// 	Addr:    addr,
-	// 	Handler: handler,
-	// }
+	handler := middleware.CorsMiddleware(r) // harus diassign di awal, biar kepanggil pertamakali
 
 	addr := fmt.Sprintf("%s:%s", viperConfig.GetString("web.host"), viperConfig.GetString("web.port"))
 	server := &http.Server{
 		Addr:    addr,
-		Handler: r,
+		Handler: handler,
 	}
 
 	fmt.Println("Server is running on port", addr)

@@ -1,6 +1,7 @@
 package route
 
 import (
+	"kelasmirai_backend/internal/controller"
 	"net/http"
 
 	"github.com/gorilla/mux"
@@ -8,6 +9,8 @@ import (
 
 type RouteConfig struct {
 	Router *mux.Router
+
+	AuthController *controller.AuthController
 }
 
 func (rc *RouteConfig) Setup() {
