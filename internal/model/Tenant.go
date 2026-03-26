@@ -40,9 +40,11 @@ func (m *Tenant) BeforeCreate(tx *gorm.DB) (err error) {
 }
 
 type TenantRepository interface {
+	WithTx(tx *gorm.DB) TenantRepository
 	Store(ctx context.Context, tenant *Tenant) error
 	GetByID(ctx context.Context, id uuid.UUID) (*Tenant, error)
 	GetBySlug(ctx context.Context, slug string) (*Tenant, error)
 	Update(ctx context.Context, tenant *Tenant) error
 	Delete(ctx context.Context, id uuid.UUID) error
+	GetActiveByID(ctx context.Context, id uuid.UUID) (*Tenant, error)
 }

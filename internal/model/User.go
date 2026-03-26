@@ -40,6 +40,7 @@ func (m *User) BeforeCreate(tx *gorm.DB) (err error) {
 }
 
 type UserRepository interface {
+	WithTx(tx *gorm.DB) UserRepository
 	Store(ctx context.Context, user *User) error
 	GetByID(ctx context.Context, id uuid.UUID) (*User, error)
 	GetByEmail(ctx context.Context, tenantID uuid.UUID, email string) (*User, error)

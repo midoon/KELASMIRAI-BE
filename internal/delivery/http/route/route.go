@@ -8,8 +8,7 @@ import (
 )
 
 type RouteConfig struct {
-	Router *mux.Router
-
+	Router         *mux.Router
 	AuthController *controller.AuthController
 }
 
@@ -25,6 +24,8 @@ func (rc *RouteConfig) setupPublicRoute() {
 		w.WriteHeader(http.StatusOK)
 		w.Write([]byte("Health route"))
 	}).Methods("GET")
+
+	rc.Router.HandleFunc("/register", rc.AuthController.Register).Methods("POST")
 }
 
 func (rc *RouteConfig) setupPrivateRoute() {

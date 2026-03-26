@@ -33,7 +33,7 @@ func NewBootstrapConfig(bsCnf *BootstrapConfig) {
 	userRepo := repository.NewUserRepository(bsCnf.Database)
 	// webhookLogRepo := repository.NewWebhookLogRepository(bsCnf.Database)
 
-	authUsecase := usecase.NewAuthUsecase(userRepo, subsPlanRepo, passResetCodeRepo, emailVerifyRepo, tenantSubsRepo)
+	authUsecase := usecase.NewAuthUsecase(bsCnf.Database, userRepo, subsPlanRepo, passResetCodeRepo, emailVerifyRepo, tenantSubsRepo)
 
 	authController := controller.NewAuthController(authUsecase)
 

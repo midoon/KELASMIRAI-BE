@@ -19,6 +19,10 @@ func NewTenantSubscriptionRepository(db *gorm.DB) model.TenantSubscriptionReposi
 	}
 }
 
+func (r *tenantSubscriptionRepository) WithTx(tx *gorm.DB) model.TenantSubscriptionRepository {
+	return &tenantSubscriptionRepository{db: tx}
+}
+
 func (r *tenantSubscriptionRepository) Store(ctx context.Context, subscription *model.TenantSubscription) error {
 	return r.db.WithContext(ctx).
 		Create(subscription).Error

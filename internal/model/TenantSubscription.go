@@ -26,7 +26,7 @@ type TenantSubscription struct {
 	Price                  decimal.Decimal    `gorm:"type:numeric(15,2);not null;check:price >= 0"`
 	Status                 SubscriptionStatus `gorm:"type:subscription_status;not null;default:'trial';index:idx_tenant_subscriptions_status"`
 	StartedAt              time.Time          `gorm:"type:timestamptz;not null"`
-	EndedAt                *time.Time         `gorm:"type:timestamptz"`
+	EndedAt                *time.Time         `gorm:"type:timestamptz"` // nullable, only set when subscription is canceled or past due
 	NextBillingAt          time.Time          `gorm:"type:timestamptz;not null;index:idx_tenant_subscriptions_next_billing"`
 	MidtransSubscriptionID *string            `gorm:"type:text"`
 	CreatedAt              time.Time          `gorm:"type:timestamptz;not null;default:now()"`
@@ -44,6 +44,7 @@ func (m *TenantSubscription) BeforeCreate(tx *gorm.DB) (err error) {
 }
 
 type TenantSubscriptionRepository interface {
+	WithTx(tx *gorm.DB) TenantSubscriptionRepository
 	Store(ctx context.Context, subscription *TenantSubscription) error
 	GetByID(ctx context.Context, id uuid.UUID) (*TenantSubscription, error)
 	Update(ctx context.Context, subscription *TenantSubscription) error
