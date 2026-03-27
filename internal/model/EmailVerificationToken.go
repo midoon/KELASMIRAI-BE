@@ -28,6 +28,7 @@ func (m *EmailVerificationToken) BeforeCreate(tx *gorm.DB) (err error) {
 }
 
 type EmailVerificationTokenRepository interface {
+	WithTx(tx *gorm.DB) EmailVerificationTokenRepository
 	Store(ctx context.Context, token *EmailVerificationToken) error
 	GetByID(ctx context.Context, id uuid.UUID) (*EmailVerificationToken, error)
 	Update(ctx context.Context, token *EmailVerificationToken) error

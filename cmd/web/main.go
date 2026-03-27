@@ -14,15 +14,18 @@ func main() {
 	viperConfig := config.NewViper()
 	log := config.NewLogger(viperConfig)
 	db := config.NewDatabase(viperConfig, log)
+	validate := config.NewValidator()
 
 	r := mux.NewRouter()
 
 	httpClient := http.Client{}
 
 	config.NewBootstrapConfig(&config.BootstrapConfig{
-		Database:   db,
-		Router:     r,
-		HttpClient: &httpClient,
+		Validate:    validate,
+		ViperConfig: viperConfig,
+		Database:    db,
+		Router:      r,
+		HttpClient:  &httpClient,
 	})
 
 	handler := middleware.CorsMiddleware(r) // harus diassign di awal, biar kepanggil pertamakali

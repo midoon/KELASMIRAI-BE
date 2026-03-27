@@ -2,7 +2,9 @@ package util
 
 import (
 	"bytes"
-	"html/template"
+	"os"
+	"path/filepath"
+	"text/template"
 
 	"github.com/spf13/viper"
 	"gopkg.in/gomail.v2"
@@ -14,7 +16,14 @@ func SendEmail(to string, subject string, templatePath string, data interface{},
 	username := emailConfig.GetString("email.smtp.username")
 	password := emailConfig.GetString("email.smtp.password")
 
-	tmpl, err := template.ParseFiles(templatePath)
+	wd, err := os.Getwd()
+	if err != nil {
+		return err
+	}
+
+	fullPath := filepath.Join(wd, templatePath)
+
+	tmpl, err := template.ParseFiles(fullPath)
 	if err != nil {
 		return err
 	}

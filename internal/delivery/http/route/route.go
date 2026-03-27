@@ -25,7 +25,7 @@ func (rc *RouteConfig) setupPublicRoute() {
 		w.Write([]byte("Health route"))
 	}).Methods("GET")
 
-	rc.Router.HandleFunc("/register", rc.AuthController.Register).Methods("POST")
+	rc.Router.HandleFunc("/auth/register", rc.AuthController.Register).Methods("POST")
 }
 
 func (rc *RouteConfig) setupPrivateRoute() {

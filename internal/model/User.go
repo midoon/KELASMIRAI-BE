@@ -19,15 +19,15 @@ const (
 )
 
 type User struct {
-	ID           uuid.UUID `gorm:"type:uuid;primaryKey"`
-	TenantID     uuid.UUID `gorm:"type:uuid;not null;uniqueIndex:unique_user_email_per_tenant"`
-	Name         string    `gorm:"type:text;not null"`
-	Email        string    `gorm:"type:text;not null;uniqueIndex:unique_user_email_per_tenant"`
-	PasswordHash string    `gorm:"type:text;not null"`
-	Role         UserRole  `gorm:"type:user_role;not null"`
-	IsActive     bool      `gorm:"not null;default:true"`
-	CreatedAt    time.Time `gorm:"type:timestamptz;not null;default:now()"`
-	Tenant       Tenant    `gorm:"foreignKey:TenantID;constraint:OnDelete:CASCADE"`
+	ID           uuid.UUID  `gorm:"type:uuid;primaryKey"`
+	TenantID     uuid.UUID  `gorm:"type:uuid;not null;uniqueIndex:unique_user_email_per_tenant"`
+	Name         string     `gorm:"type:text;not null"`
+	Email        string     `gorm:"type:text;not null;uniqueIndex:unique_user_email_per_tenant"`
+	PasswordHash string     `gorm:"type:text;not null"`
+	Role         UserRole   `gorm:"type:user_role;not null"`
+	ActivatedAt  *time.Time `gorm:"type:timestamptz"`
+	CreatedAt    time.Time  `gorm:"type:timestamptz;not null;default:now()"`
+	Tenant       Tenant     `gorm:"foreignKey:TenantID;constraint:OnDelete:CASCADE"`
 }
 
 func (User) TableName() string {

@@ -19,6 +19,10 @@ func NewEmailVerificationTokenRepository(db *gorm.DB) model.EmailVerificationTok
 	}
 }
 
+func (r *emailVerificationTokenRepository) WithTx(tx *gorm.DB) model.EmailVerificationTokenRepository {
+	return &emailVerificationTokenRepository{db: tx}
+}
+
 func (r *emailVerificationTokenRepository) Store(ctx context.Context, token *model.EmailVerificationToken) error {
 	return r.db.WithContext(ctx).
 		Create(token).Error

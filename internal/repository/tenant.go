@@ -55,6 +55,17 @@ func (r *tenantRepository) GetBySlug(ctx context.Context, slug string) (*model.T
 	return &tenant, nil
 }
 
+func (r *tenantRepository) GetByEmail(ctx context.Context, email string) (*model.Tenant, error) {
+	var tenant model.Tenant
+	err := r.db.WithContext(ctx).
+		Where("email = ?", email).
+		First(&tenant).Error
+	if err != nil {
+		return nil, err
+	}
+	return &tenant, nil
+}
+
 func (r *tenantRepository) Update(ctx context.Context, tenant *model.Tenant) error {
 	return r.db.WithContext(ctx).
 		Model(&model.Tenant{}).

@@ -44,6 +44,7 @@ type TenantRepository interface {
 	Store(ctx context.Context, tenant *Tenant) error
 	GetByID(ctx context.Context, id uuid.UUID) (*Tenant, error)
 	GetBySlug(ctx context.Context, slug string) (*Tenant, error)
+	GetByEmail(ctx context.Context, email string) (*Tenant, error)
 	Update(ctx context.Context, tenant *Tenant) error
 	Delete(ctx context.Context, id uuid.UUID) error
 	GetActiveByID(ctx context.Context, id uuid.UUID) (*Tenant, error)

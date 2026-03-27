@@ -1,7 +1,6 @@
 package controller
 
 import (
-	"encoding/json"
 	"kelasmirai_backend/internal/dto"
 	"kelasmirai_backend/internal/helper"
 	"kelasmirai_backend/internal/usecase"
@@ -21,20 +20,29 @@ func NewAuthController(authUsecase usecase.AuthUsecase) *AuthController {
 func (ac *AuthController) Register(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 
-	request := dto.TenantRegisterRequest{}
-
-	if err := json.NewDecoder(r.Body).Decode(&request); err != nil {
+	if err := r.ParseMultipartForm(10 << 20); err != nil {
 		helper.WriteJSON(w, http.StatusBadRequest, dto.MessageResponse{
 			Status:  false,
-			Message: "invalid request body",
+			Message: err.Error(),
 		})
 		return
+	}
+
+	request := dto.TenantRegisterRequest{
+		SchoolName:    r.FormValue("school_name"),
+		SchoolSlug:    r.FormValue("school_slug"),
+		SchoolEmail:   r.FormValue("school_email"),
+		SchoolPhone:   r.FormValue("school_phone"),
+		SchoolAddress: r.FormValue("school_address"),
+		AdminName:     r.FormValue("admin_name"),
+		AdminEmail:    r.FormValue("admin_email"),
+		AdminPassword: r.FormValue("admin_password"),
 	}
 
 	if err := ac.authUsecase.Register(ctx, request); err != nil {
 		helper.WriteJSON(w, http.StatusInternalServerError, dto.MessageResponse{
 			Status:  false,
-			Message: "failed to register tenant",
+			Message: "failed to register tenant: " + err.Error(),
 		})
 		return
 	}

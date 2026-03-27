@@ -8,7 +8,7 @@ CREATE TABLE users
   email          TEXT NOT NULL,
   password_hash  TEXT NOT NULL,
   role           user_role NOT NULL,
-  is_active      BOOLEAN NOT NULL DEFAULT TRUE,
+  activated_at   TIMESTAMPTZ,
   created_at     TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   CONSTRAINT fk_user_tenant
     FOREIGN KEY (tenant_id)
