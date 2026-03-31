@@ -55,5 +55,22 @@
     "producer": {
       "enabled": false
     }
+  },
+  "email": {
+    "smtp": {
+      "host": "smtp.gmail.com",
+      "port": 587,
+      "username": "harunbangkit14@gmail.com",
+      "password": "dryjmpnqdsifskal",
+      "email": "harunbangkit14@gmail.com"
+    }
+  },
+  "plans": {
+    "default": "Free"
+  },
+  "services": {
+    "frontend": {
+      "url": "http://localhost:3000"
+    }
   }
 }

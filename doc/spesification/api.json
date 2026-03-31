@@ -161,6 +161,35 @@
         }
       }
     },
+    "/auth/tenant/verify-registration": {
+      "get": {
+        "tags": ["Auth"],
+        "summary": "Verify registration email",
+        "parameters": [
+          {
+            "name": "token",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Email verified",
+            "content": {
+              "application/json": {
+                "example": {
+                  "status": true,
+                  "message": "Email verified. You can now log in."
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/auth/tenant/login": {
       "post": {
         "tags": ["Auth"],

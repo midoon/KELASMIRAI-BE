@@ -53,3 +53,23 @@ func (ac *AuthController) Register(w http.ResponseWriter, r *http.Request) {
 	}
 	helper.WriteJSON(w, http.StatusOK, res)
 }
+
+func (ac *AuthController) VerifyRegistration(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+
+	token := r.URL.Query().Get("token")
+
+	if err := ac.authUsecase.VerifyRegistration(ctx, token); err != nil {
+		helper.WriteJSON(w, http.StatusBadRequest, dto.MessageResponse{
+			Status:  false,
+			Message: "invalid or expired token: " + err.Error(),
+		})
+		return
+	}
+
+	helper.WriteJSON(w, http.StatusOK, dto.MessageResponse{
+		Status:  true,
+		Message: "Email verified. You can now log in.",
+	})
+
+}

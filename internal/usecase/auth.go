@@ -19,6 +19,7 @@ import (
 
 type AuthUsecase interface {
 	Register(ctx context.Context, request dto.TenantRegisterRequest) error
+	VerifyRegistration(ctx context.Context, token string) error
 }
 
 type authUsecase struct {
@@ -128,20 +129,20 @@ func (au *authUsecase) Register(ctx context.Context, request dto.TenantRegisterR
 
 	if err := tenantRepoTx.Store(ctx, &tenant); err != nil {
 		tx.Rollback()
-		return err
+		return helper.NewCustomError(http.StatusInternalServerError, "failed to create tenant", err)
 	}
 
 	tenantSubscription.TenantID = tenant.ID
 
 	if err := tenantSubscriptionRepoTx.Store(ctx, &tenantSubscription); err != nil {
 		tx.Rollback()
-		return err
+		return helper.NewCustomError(http.StatusInternalServerError, "failed to create tenant subscription", err)
 	}
 
 	user.TenantID = tenant.ID
 	if err := userRepoTx.Store(ctx, &user); err != nil {
 		tx.Rollback()
-		return err
+		return helper.NewCustomError(http.StatusInternalServerError, "failed to create user", err)
 	}
 
 	// create and store email verification token
@@ -154,7 +155,7 @@ func (au *authUsecase) Register(ctx context.Context, request dto.TenantRegisterR
 
 	if err := au.emailVerifRepo.WithTx(tx).Store(ctx, &emailVerificationToken); err != nil {
 		tx.Rollback()
-		return err
+		return helper.NewCustomError(http.StatusInternalServerError, "failed to create email verification token", err)
 	}
 
 	to := request.AdminEmail
@@ -166,19 +167,59 @@ func (au *authUsecase) Register(ctx context.Context, request dto.TenantRegisterR
 		Year             int
 	}{
 		Name:             user.Name,
-		VerificationLink: fmt.Sprintf("https://yourdomain.com/verify-email?token=%s", token),
+		VerificationLink: fmt.Sprintf("%s/auth/tenant/verify-registration?token=%s", au.viperCnf.GetString("services.frontend.url"), token),
 		Year:             time.Now().Year(),
 	}
 	emailCnf := au.viperCnf
 
 	if err := util.SendEmail(to, subject, templatePath, data, emailCnf); err != nil {
 		tx.Rollback()
-		return err
+		return helper.NewCustomError(http.StatusInternalServerError, "failed to send verification email", err)
 	}
 
 	if err := tx.Commit().Error; err != nil {
-		return err
+		return helper.NewCustomError(http.StatusInternalServerError, "failed to commit transaction", err)
 	}
 
+	return nil
+}
+
+func (au *authUsecase) VerifyRegistration(ctx context.Context, token string) error {
+	emailVerifToken, err := au.emailVerifRepo.GetByToken(ctx, token)
+	if err != nil {
+		return helper.NewCustomError(http.StatusBadRequest, "invalid or expired token", err)
+	}
+
+	if emailVerifToken.UsedAt != nil || emailVerifToken.ExpiresAt.Before(time.Now()) {
+		return helper.NewCustomError(http.StatusBadRequest, "invalid or expired token", nil)
+	}
+
+	tx := au.db.WithContext(ctx).Begin()
+	emailVerifRepoTx := au.emailVerifRepo.WithTx(tx)
+	userRepoTx := au.userRepo.WithTx(tx)
+
+	now := time.Now()
+	emailVerifToken.UsedAt = &now
+
+	if err := emailVerifRepoTx.Update(ctx, emailVerifToken); err != nil {
+		return helper.NewCustomError(http.StatusInternalServerError, "failed to verify email", err)
+	}
+
+	user, err := userRepoTx.GetByID(ctx, emailVerifToken.UserID)
+	if err != nil {
+		tx.Rollback()
+		return helper.NewCustomError(http.StatusInternalServerError, "failed to verify email", err)
+	}
+
+	user.ActivatedAt = &now
+
+	if err := userRepoTx.Update(ctx, user); err != nil {
+		tx.Rollback()
+		return helper.NewCustomError(http.StatusInternalServerError, "failed to verify email", err)
+	}
+
+	if err := tx.Commit().Error; err != nil {
+		return helper.NewCustomError(http.StatusInternalServerError, "failed to verify email", err)
+	}
 	return nil
 }

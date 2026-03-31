@@ -1,1 +1,1 @@
-1. create registration API
+1. create confirm link handling
